@@ -4,7 +4,7 @@
 ; (def free-pattern (vec (first (take 1 (generate-valid-free-cell-indices)))))
 
 (ns extra-prognoses
-  (:require clojure.math.combinatorics [clojure.string :as string])
+  (:require clojure.math.combinatorics [clojure.string :as string] [clojure.java.io :as io])
   (:use [clojure.math.combinatorics :only [combinations]]))
 
 ; an implementation of part of Python's random.sample
@@ -279,7 +279,27 @@
 ;       result
 ;       (recur (concat result (first cols)) (rest cols)))))
 
+(defn generate-unique-selection-seqs-with-random-f-patterns [selection-count f-patterns]
+  (let [f-pattern-count (count f-patterns)]
+    (loop [sels (hash-set)]
+      (if (= (count sels) selection-count)
+        sels
+        (recur (conj sels (flatten (make-columns-after-F (nth f-patterns (rand-int f-pattern-count))))))))))
 
+
+(defn generate-ss-selections [selection-count free-pattern-count]
+  (let [valid-f-patterns (take free-pattern-count (generate-valid-free-cell-indices))]
+    (map #(string/join ";" %) (generate-unique-selection-seqs-with-random-f-patterns selection-count valid-f-patterns))))
+
+
+; (write-ss-selections-to-file "/dev/tty" 1 1)
+(defn write-ss-selections-to-file [filename selection-count free-pattern-count]
+  (with-open [cout (io/writer filename)]
+    (dorun
+      (map #(.write cout (str % "\n")) (generate-ss-selections selection-count free-pattern-count)))))
+        
+
+; pretty display
 (defn -main []
   (let [f-pattern-count 10
         valid-f-patterns (take f-pattern-count (generate-valid-free-cell-indices))
