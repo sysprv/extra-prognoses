@@ -109,14 +109,14 @@
 
 (defn pp-row [selection rowno]
   (let [row-idxs (row-indices rowno)]
-    (doall ; do for side effects
+    (dorun ; do for side effects
       (map #(print (format "[%1$3s ]" (nth selection %))) row-idxs)) ; no trailing spaces please
     (prn)))
 
 
 (defn pp-selection [selection]
   ; selections in column order. but print row by row.
-  (doall (map #(pp-row selection %) (range 5)))
+  (dorun (map #(pp-row selection %) (range 5)))
   (prn)
   nil)
 
@@ -224,7 +224,7 @@
 
 (defn print-some-selections []
   (let [free-points (take 10 (generate-valid-free-cell-indices))]
-    (doall (map (fn [f-p]
+    (dorun (map (fn [f-p]
                   (let [sel (make-selection (make-columns-wasteful))
                     selection-with-free (apply-free-points sel f-p)]
                     (pp-selection selection-with-free)
@@ -308,7 +308,7 @@
                      (if (= (count sels) selection-count)
                        sels
                        (recur (conj sels (flatten (make-columns-after-F (nth valid-f-patterns (rand-int f-pattern-count))))))))]
-    (doall
+    (dorun
       (map (fn [sel] (prn (string/join ";" sel)) (pp-selection sel)) selections)))
   0)
 
