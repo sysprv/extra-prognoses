@@ -61,8 +61,8 @@
 ; 3 8 13  18  23
 ; 4 9 14  19  24
 ;
-; rules: there can be only 6 "F"s total in the whole grid.
-; there must be 3 Fs in the inner 3x3 grid,
+; rules: there can be only 7 "F"s total in the whole grid.
+; there must be 4 Fs in the inner 3x3 grid,
 ;   the other 3 Fs must be on the remaining 16 cells -- the frame.
 ; any column (top - bottom), row (left - right) or diagonal
 ; can only contain up to 2 Fs.
@@ -142,9 +142,7 @@
 ; predicates to filter out combinations that are not valid
 ; F patterns according to the game rules.
 
-; why "wasteful"? this method runs all checks before making the decision.
-; informational, but wasteful.
-(defn free-cell-indices-valid?-wasteful [free-cell-indices]
+(defn free-cell-indices-valid?-prn [free-cell-indices]
   (let [f-count-border (count-free-cells free-cell-indices frame-indices)
         f-count-block (count-free-cells free-cell-indices inner-block-indices)
         f-count-per-path (map #(count-free-cells free-cell-indices %) structure-indices)
@@ -156,7 +154,7 @@
 (defn free-cell-indices-valid? [free-cell-indices]
   (if (not= 3 (count-free-cells free-cell-indices frame-indices))
     false
-    (if (not= 3 (count-free-cells free-cell-indices inner-block-indices))
+    (if (not= 4 (count-free-cells free-cell-indices inner-block-indices))
       false
       (if (not= 2 (apply max (map #(count-free-cells free-cell-indices %) structure-indices)))
         false
@@ -166,7 +164,7 @@
 
 (defn all-possible-free-patterns []
   ; frame and inner block together
-  (combinations (range 25) 6))
+  (combinations (range 25) 7))
 
 ; for testing...
 (defn a-few-free-points []
