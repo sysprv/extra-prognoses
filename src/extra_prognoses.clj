@@ -151,15 +151,21 @@
     (prn "f count block" f-count-block)
     (prn "max f of any path" max-f-count-path)))
 
-(defn free-cell-indices-valid? [free-cell-indices]
+(defn free-cell-indices-valid?-old [free-cell-indices]
   (if (not= 3 (count-free-cells free-cell-indices frame-indices))
     false
-    (if (not= 4 (count-free-cells free-cell-indices inner-block-indices))
+    (if (not= 3 (count-free-cells free-cell-indices inner-block-indices))
       false
       (if (not= 2 (apply max (map #(count-free-cells free-cell-indices %) structure-indices)))
         false
         true))))
 
+(defn free-cell-indices-valid? [free-cell-indices]
+  (if (not= 3 (count-free-cells free-cell-indices frame-indices))
+    false
+    (if (not= 4 (count-free-cells free-cell-indices inner-block-indices))
+      false
+      true)))
 
 
 (defn all-possible-free-patterns []
