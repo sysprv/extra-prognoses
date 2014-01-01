@@ -154,7 +154,7 @@
 (defn free-cell-indices-valid?-old [free-cell-indices]
   (if (not= 3 (count-free-cells free-cell-indices frame-indices))
     false
-    (if (not= 3 (count-free-cells free-cell-indices inner-block-indices))
+    (if (not= 4 (count-free-cells free-cell-indices inner-block-indices))
       false
       (if (not= 2 (apply max (map #(count-free-cells free-cell-indices %) structure-indices)))
         false
@@ -165,6 +165,7 @@
     false
     (if (not= 4 (count-free-cells free-cell-indices inner-block-indices))
       false
+      ;; the up-down/left-right/diagonal F counts don't matter any more.
       true)))
 
 
